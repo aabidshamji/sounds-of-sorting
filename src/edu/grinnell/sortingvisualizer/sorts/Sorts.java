@@ -20,6 +20,7 @@ public class Sorts {
 	// Selection Sort
 	public static <T extends Comparable<T>>  List<SortEvent<T>> selectionSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
+		if (arr == null) {return events;}
 		
 		for (int i = 0; i < arr.length - 1; i++) {
 			int lowestIndex = i;
@@ -40,6 +41,8 @@ public class Sorts {
 	public static <T extends Comparable<T>> List<SortEvent<T>> insertionSort (T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
 		
+		if (arr == null) {return events;}
+		
 		for (int i = 1; i < arr.length; i++) {
 			for (int j = i; j > 0 && arr[j-1].compareTo(arr[j]) > 0; j--) {
 				events.add(new CompareEvent<T>(j-1, j));
@@ -54,6 +57,8 @@ public class Sorts {
 	// Bubble Sort
 	public static <T extends Comparable<T>> List<SortEvent<T>> bubbleSort (T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
+		
+		if (arr == null) {return events;}
 		
 		for (int i = 0; i < arr.length - 1; i++) {
 			for (int j = 0; j < arr.length - i - 1; j++) {
@@ -147,6 +152,7 @@ public class Sorts {
 
 	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
+		if (arr == null) {return events;}
 		mergeSortHelper(arr, 0, arr.length - 1, events);
 		return events;
 	}
@@ -186,6 +192,7 @@ public class Sorts {
 
 	public static <T extends Comparable<T>> List<SortEvent<T>> quickSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
+		if (arr == null) {return events;}
 		Qsort(arr, 0, arr.length-1, events);
 		return events;
 	}
@@ -202,10 +209,12 @@ public class Sorts {
 		return true;  
 	} 
 
-	public static <T extends Comparable<T>> List<SortEvent<T>> BogoSort(T[] arr)  {  
+	public static <T extends Comparable<T>> List<SortEvent<T>> bogoSort(T[] arr)  {  
+		List<SortEvent<T>> events = new ArrayList<>();
+		if (arr == null) {return events;}
+		
 		Random rand = new Random();
 		int nextInt = rand.nextInt(arr.length);
-		List<SortEvent<T>> events = new ArrayList<>();
 		
 		while (!bogoSortHelper(arr, events)) {  
 			for (int i = 0; i < arr.length; i++){  
@@ -223,5 +232,28 @@ public class Sorts {
 		}
 	} // eventSort
 
+//	static <T> void printArray(T[] arr)
+//    {
+//        int n = arr.length;
+//        for (int i=0; i<n; ++i)
+//            System.out.print(arr[i] + " ");
+//        System.out.println();
+//    }
+//	
+//	public static <T> void main (String[] args) {
+//		Integer[] arr6 = new Integer[1001];
+//		Integer[] arr6a = new Integer[1001];
+//		
+//		for (int i = 1000; i >= 0; i--) {
+//			arr6[1000 - i] = i;
+//			arr6a[i] = i;
+//		}
+//		
+//		printArray(arr6);
+//		selectionSort(arr6);
+//		printArray(arr6);
+//		printArray(arr6a);
+//		
+//	}
 
 }

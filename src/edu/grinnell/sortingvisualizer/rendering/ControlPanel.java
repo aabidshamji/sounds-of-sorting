@@ -59,7 +59,7 @@ public class ControlPanel extends JPanel {
 		case("Quick"):
 			return Sorts.quickSort(arr);
 		case("Bogo"):
-			return Sorts.BogoSort(arr);
+			return Sorts.bogoSort(arr);
 		default:
 			throw new IllegalArgumentException("generateEvents");
 		}
