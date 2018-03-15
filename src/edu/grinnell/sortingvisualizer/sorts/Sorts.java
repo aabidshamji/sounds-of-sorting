@@ -21,7 +21,7 @@ public class Sorts {
 	public static <T extends Comparable<T>>  List<SortEvent<T>> selectionSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
 		if (arr == null) {return events;}
-		
+
 		for (int i = 0; i < arr.length - 1; i++) {
 			int lowestIndex = i;
 			for (int j = i; j < arr.length; j++) {
@@ -33,16 +33,16 @@ public class Sorts {
 			swap(arr, i, lowestIndex);
 			events.add(new SwapEvent<T>(i, lowestIndex));
 		} // for i
-		
+
 		return events;
 	} // selectionSort
 
 	// InsertionSort
 	public static <T extends Comparable<T>> List<SortEvent<T>> insertionSort (T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
-		
+
 		if (arr == null) {return events;}
-		
+
 		for (int i = 1; i < arr.length; i++) {
 			for (int j = i; j > 0 && arr[j-1].compareTo(arr[j]) > 0; j--) {
 				events.add(new CompareEvent<T>(j-1, j));
@@ -50,16 +50,16 @@ public class Sorts {
 				events.add(new SwapEvent<T>(j - 1, j));
 			} // for j
 		} // for i
-		
+
 		return events;
 	} // insertionSort
 
 	// Bubble Sort
 	public static <T extends Comparable<T>> List<SortEvent<T>> bubbleSort (T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
-		
+
 		if (arr == null) {return events;}
-		
+
 		for (int i = 0; i < arr.length - 1; i++) {
 			for (int j = 0; j < arr.length - i - 1; j++) {
 				if (arr[j].compareTo(arr[j+1]) > 0) {
@@ -69,7 +69,7 @@ public class Sorts {
 				} // if
 			} // for j
 		} // for i
-		
+
 		return events;
 	} // bubbleSort
 
@@ -77,73 +77,42 @@ public class Sorts {
 	@SuppressWarnings("unchecked")
 	private static <T extends Comparable <? super T>> void merge 
 	(T[] arr, int lo, int mid, int hi, List<SortEvent<T>> events) {
-	
-		int i, j, k;
-		int l1 = mid - lo + 1;
-		int l2 = hi - mid;
+		Object[] temp = new Object[hi-lo];
 
-		/* create temp arrays */
-		Object[] left = new Object[l1];
-		Object[] right = new Object[l2];
+		int i = lo, j = mid, k = 0;
 
-		/* Copy data to temp arrays left[] and right[] */
-		for (i = 0; i < l1; i++)
-			left[i] = arr[lo + i];
-		for (j = 0; j < l2; j++)
-			right[j] = arr[mid + 1+ j];
-
-		/* Merge the temp arrays back into arr[l..r]*/
-		i = 0; // Initial index of first subarray
-		j = 0; // Initial index of second subarray
-		k = lo; // Initial index of merged subarray
-		while (i < l1 && j < l2)
-		{
-			if (((T)left[i]).compareTo((T)right[j]) <= 0)
-			{
+		while (i < mid && j < hi) {
+			if (arr[i].compareTo(arr[j]) <= 0) {
 				events.add(new CompareEvent<T>(i, j));
-				arr[k] = (T) left[i];
-				events.add(new CopyEvent<T>(k, (T) left[i]));
-				i++;
+				temp[k++] = arr[i++];
+			} else {
+				temp[k++] = arr[j++];
 			}
-			else
-			{
-				arr[k] = (T) right[j];
-				events.add(new CopyEvent<T>(k, (T) right[i]));
-				j++;
-			}
-			k++;
+		} // while
+
+		while (i < mid) {
+			temp[k++] = arr[i++];
 		}
 
-		/* Copy the remaining elements of L[], if there
-	       are any */
-		while (i < l1)
-		{
-			arr[k] = (T) left[i];
-			events.add(new CopyEvent<T>(k, (T) left[i]));
-			i++;
-			k++;
+		while (j < hi) {
+			temp[k++] = arr[j++];
 		}
 
-		/* Copy the remaining elements of R[], if there
-	       are any */
-		while (j < l2)
-		{
-			arr[k] = (T) right[j];
-			events.add(new CopyEvent<T>(k, (T) right[i]));
-			j++;
-			k++;
+		for (int g = 0; g < temp.length; g++) {
+			arr[g + lo] = (T) temp[g];
+			events.add(new CopyEvent<T>(g, (T) temp[g]));
 		}
-	} // merge
-
+	} // merge 
+	
 	public static <T extends Comparable<T>> void mergeSortHelper
 	(T[] arr, int lo, int hi, List<SortEvent<T>> events) {
-		if (lo < hi) {
+		if (lo < hi - 1) {
 			// Find the middle point
-			int mid = (lo + hi) / 2;
-
+			int mid = lo + (hi - lo) / 2;
+			
 			// Sort 1st and 2nd halves
 			mergeSortHelper(arr, lo, mid, events);
-			mergeSortHelper(arr, mid + 1, hi, events);
+			mergeSortHelper(arr, mid, hi, events);
 
 			// Merge the sorted halves
 			merge(arr, lo, mid, hi, events);
@@ -153,7 +122,7 @@ public class Sorts {
 	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
 		if (arr == null) {return events;}
-		mergeSortHelper(arr, 0, arr.length - 1, events);
+		mergeSortHelper(arr, 0, arr.length, events);
 		return events;
 	}
 
@@ -179,25 +148,24 @@ public class Sorts {
 		return i+1;
 	}
 
-	public static <T extends Comparable<T>> void Qsort(T arr[], int low, int high, List<SortEvent<T>> events)
+	public static <T extends Comparable<T>> void quickSortHelper(T arr[], int low, int high, List<SortEvent<T>> events)
 	{
 		if (low < high)
 		{
 			int pi = partition(arr, low, high, events);
 			// Recursively sort elements before and after the partition
-			Qsort(arr, low, pi-1, events);
-			Qsort(arr, pi+1, high, events);
+			quickSortHelper(arr, low, pi-1, events);
+			quickSortHelper(arr, pi+1, high, events);
 		}
 	}
 
 	public static <T extends Comparable<T>> List<SortEvent<T>> quickSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
 		if (arr == null) {return events;}
-		Qsort(arr, 0, arr.length-1, events);
+		quickSortHelper(arr, 0, arr.length-1, events);
 		return events;
 	}
 
-	// Bogo Sort
 	// Check if the array is sorted
 	public static <T extends Comparable<T>> boolean bogoSortHelper(T[] arr, List<SortEvent<T>> events)  {  
 		for (int i = 1; i < arr.length; i++){
@@ -224,7 +192,7 @@ public class Sorts {
 		}
 		return events;
 	} // bogoSort
-	
+
 	// eventSort
 	public static <T> void eventSort(T[] arr, List<SortEvent<T>> events) {
 		for (int i = 0; i < events.size(); i++) {
@@ -232,28 +200,27 @@ public class Sorts {
 		}
 	} // eventSort
 
-//	static <T> void printArray(T[] arr)
-//    {
-//        int n = arr.length;
-//        for (int i=0; i<n; ++i)
-//            System.out.print(arr[i] + " ");
-//        System.out.println();
-//    }
-//	
-//	public static <T> void main (String[] args) {
-//		Integer[] arr6 = new Integer[1001];
-//		Integer[] arr6a = new Integer[1001];
-//		
-//		for (int i = 1000; i >= 0; i--) {
-//			arr6[1000 - i] = i;
-//			arr6a[i] = i;
-//		}
-//		
-//		printArray(arr6);
-//		selectionSort(arr6);
-//		printArray(arr6);
-//		printArray(arr6a);
-//		
-//	}
+		static <T> void printArray(T[] arr)
+	    {
+	        int n = arr.length;
+	        for (int i=0; i<n; ++i)
+	            System.out.print(arr[i] + " ");
+	        System.out.println();
+	    }
+		
+		public static <T> void main (String[] args) {
+			Integer[] arr6 = new Integer[11];
+			Integer[] arr6a = new Integer[11];
+			
+			for (int i = 10; i >= 0; i--) {
+				arr6[10 - i] = i;
+				arr6a[i] = i;
+			}
+			
+			printArray(arr6);
+			bogoSort(arr6);
+			printArray(arr6);
+			printArray(arr6a);
+		}
 
 }
