@@ -28,11 +28,11 @@ public class ArrayPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		Integer[] noteIndices = notes.getNotes();
-		int noteWidth = this.getWidth()/notes.n;
-		int heightIncre = this.getHeight()/notes.n;
-		int colorIncre = 173/notes.n;
+		int noteWidth = this.getWidth()/notes.length();
+		int heightIncre = this.getHeight()/notes.length();
+		int colorIncre = 173/notes.length();
 
-		for (int i = 0; i < notes.n; i++) {
+		for (int i = 0; i < notes.length(); i++) {
 			int noteHeight = heightIncre + Math.abs(noteIndices[i]) * heightIncre;
 			if (notes.isHighlighted(i)) {
 				g.setColor(Color.PINK);

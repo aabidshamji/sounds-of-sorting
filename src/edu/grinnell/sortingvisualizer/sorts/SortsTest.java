@@ -22,7 +22,7 @@ public class SortsTest {
 		case "bogo":
 			return Sorts.bogoSort(arr);
 		default:
-			return null;
+			throw new IllegalArgumentException("generateEvents");
 		} // switch
 	}
 
