@@ -104,9 +104,9 @@ public class SortsTest {
 		testSort("quick");
 	}
 	
-	@Test
-	public void testBogoSort() {
-		testSort("bogo");
-	}
+//	@Test
+//	public void testBogoSort() {
+//		testSort("bogo");
+//	}
 
 }

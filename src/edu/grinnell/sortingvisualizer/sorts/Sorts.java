@@ -159,155 +159,153 @@ public class Sorts {
 	} // mergeSort
 
 	// Quick Sort
+//	/**
+//	 * 
+//	 * @param arr, left, right
+//	 * @return
+//	 */
+//	public static <T extends Comparable<T>> int medianOfThree(T[] arr, int left, int right) {
+//		int med = (left + right) / 2;
+//
+//		if (arr[left].compareTo(arr[right]) > 0 && arr[left].compareTo(arr[med]) < 0
+//				|| arr[left].compareTo(arr[right]) < 0 && arr[left].compareTo(arr[med]) > 0) {
+//			return left;
+//		} else if (arr[right].compareTo(arr[left]) > 0 && arr[right].compareTo(arr[med]) < 0
+//				|| arr[right].compareTo(arr[left]) < 0 && arr[right].compareTo(arr[med]) > 0) {
+//			return right;
+//		} else {
+//			return med;
+//		}
+//	}  // end medianOfThree
+
+
 	/**
-	 * 
-	 * @param arr, left, right
+	 * Modifies the array so that all the elements to the left of the pivot are less than the pivot
+	 * 	and all the elements to the right of the pivot are greater than the pivot
+	 * @param arr, low, high, events
+	 * @return pivot index
+	 */
+	public static <T extends Comparable<T>> int partition(T arr[], int low, int high, List<SortEvent<T>> events) {
+		T pivot = arr[high];
+		int i = (low-1); 
+
+		for (int j = low; j < high; j++) {
+			if (arr[j].compareTo(pivot) <= 0) {
+				events.add(new CompareEvent<T>(j, high));
+				i++;
+				// Swap elements
+				swap(arr, i, j);
+				events.add(new SwapEvent<T>(i, j));
+			}
+		} // for j
+
+		// Swap elements
+		swap(arr, i + 1, high);
+		events.add(new SwapEvent<T>(i + 1, high));
+
+		return i + 1;
+	} // partition
+
+	/**
+	 * Recursively sorts an array using Quick Sort Algorithm
+	 * @param arr
+	 * @param low
+	 * @param high
+	 * @param events
+	 */
+	public static <T extends Comparable<T>> void quickSortHelper
+	(T arr[], int low, int high, List<SortEvent<T>> events) {
+		if (low < high) {
+			int pi = partition(arr, low, high, events);
+
+			// Recursively sort elements before and after the partition
+			quickSortHelper(arr, low, pi-1, events);
+			quickSortHelper(arr, pi+1, high, events);
+		} // if
+	} // quickSortHelper
+
+	/**
+	 * Sorts an array using Quick Sort Algorithm
+	 * @param arr
 	 * @return
 	 */
-	public static <T extends Comparable<T>> T medianOfThree(T[] arr, int left, int right) {
-		int mid = (left + right) / 2;
-		// order left & center
-		if(arr[left].compareTo(arr[mid]) > 0)
-			swap(arr, left, mid);
-		// order left & right
-		if( arr[left].compareTo(arr[right]) > 0)
-			swap(arr, left, right);
-		// order center & right
-		if( arr[mid].compareTo(arr[right]) > 0)
-			swap(arr, mid, right);
+	public static <T extends Comparable<T>> List<SortEvent<T>> quickSort(T[] arr) {
+		List<SortEvent<T>> events = new ArrayList<>();
 
-		swap(arr, mid, right-1);             // put pivot on right
-		return arr[right-1];          // return median value
-	}  // end medianOfThree
+		if (arr == null) {return events;}
 
+		quickSortHelper(arr, 0, arr.length-1, events);
 
-/**
- * Modifies the array so that all the elements to the left of the pivot are less than the pivot
- * 	and all the elements to the right of the pivot are greater than the pivot
- * @param arr, low, high, events
- * @return pivot index
- */
-public static <T extends Comparable<T>> int partition(T arr[], int low, int high, List<SortEvent<T>> events) {
-	T pivot = medianOfThree(arr, low, high);
-	int i = (low-1); 
+		return events;
+	} // quickSort
 
-	for (int j = low; j < high; j++) {
-		if (arr[j].compareTo(pivot) <= 0) {
-			events.add(new CompareEvent<T>(j, high));
-			i++;
-			// Swap elements
-			swap(arr, i, j);
-			events.add(new SwapEvent<T>(i, j));
+	// Bogo Sort
+	/**
+	 * Check if the array is sorted or not
+	 * @param arr
+	 * @param events
+	 * @return
+	 */
+	public static <T extends Comparable<T>> boolean bogoSortHelper(T[] arr, List<SortEvent<T>> events)  {  
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i].compareTo(arr[i-1]) < 0) {
+				events.add(new CompareEvent<T>(i, i-1));
+				return false;  
+			}
+		} // for i
+
+		return true;  
+	} // bogoSortHelper
+
+	/** 
+	 * Sorts an array using Bogo Sort Algorithm
+	 * @param arr
+	 * @return
+	 */
+	public static <T extends Comparable<T>> List<SortEvent<T>> bogoSort(T[] arr)  {  
+		List<SortEvent<T>> events = new ArrayList<>();
+		if (arr == null) {return events;}
+
+		Random rand = new Random();
+		int nextInt = rand.nextInt(arr.length);
+
+		while (!bogoSortHelper(arr, events)) {  
+			for (int i = 0; i < arr.length; i++) {  
+				swap(arr, i, nextInt); 
+				nextInt = rand.nextInt(arr.length);
+			}  
 		}
-	} // for j
 
-	// Swap elements
-	swap(arr, i + 1, high);
-	events.add(new SwapEvent<T>(i + 1, high));
+		return events;
+	} // bogoSort
 
-	return i + 1;
-} // partition
-
-/**
- * Recursively sorts an array using Quick Sort Algorithm
- * @param arr
- * @param low
- * @param high
- * @param events
- */
-public static <T extends Comparable<T>> void quickSortHelper
-(T arr[], int low, int high, List<SortEvent<T>> events) {
-	if (low < high) {
-		int pi = partition(arr, low, high, events);
-
-		// Recursively sort elements before and after the partition
-		quickSortHelper(arr, low, pi-1, events);
-		quickSortHelper(arr, pi+1, high, events);
-	} // if
-} // quickSortHelper
-
-/**
- * Sorts an array using Quick Sort Algorithm
- * @param arr
- * @return
- */
-public static <T extends Comparable<T>> List<SortEvent<T>> quickSort(T[] arr) {
-	List<SortEvent<T>> events = new ArrayList<>();
-
-	if (arr == null) {return events;}
-
-	quickSortHelper(arr, 0, arr.length-1, events);
-
-	return events;
-} // quickSort
-
-// Bogo Sort
-/**
- * Check if the array is sorted or not
- * @param arr
- * @param events
- * @return
- */
-public static <T extends Comparable<T>> boolean bogoSortHelper(T[] arr, List<SortEvent<T>> events)  {  
-	for (int i = 1; i < arr.length; i++) {
-		if (arr[i].compareTo(arr[i-1]) < 0) {
-			events.add(new CompareEvent<T>(i, i-1));
-			return false;  
+	// eventSort
+	public static <T> void eventSort(T[] arr, List<SortEvent<T>> events) {
+		for (int i = 0; i < events.size(); i++) {
+			events.get(i).apply(arr);
 		}
-	} // for i
+	} // eventSort
 
-	return true;  
-} // bogoSortHelper
-
-/** 
- * Sorts an array using Bogo Sort Algorithm
- * @param arr
- * @return
- */
-public static <T extends Comparable<T>> List<SortEvent<T>> bogoSort(T[] arr)  {  
-	List<SortEvent<T>> events = new ArrayList<>();
-	if (arr == null) {return events;}
-
-	Random rand = new Random();
-	int nextInt = rand.nextInt(arr.length);
-
-	while (!bogoSortHelper(arr, events)) {  
-		for (int i = 0; i < arr.length; i++) {  
-			swap(arr, i, nextInt); 
-			nextInt = rand.nextInt(arr.length);
-		}  
-	}
-
-	return events;
-} // bogoSort
-
-// eventSort
-public static <T> void eventSort(T[] arr, List<SortEvent<T>> events) {
-	for (int i = 0; i < events.size(); i++) {
-		events.get(i).apply(arr);
-	}
-} // eventSort
-
-//	static <T> void printArray(T[] arr)
-//	{
-//		int n = arr.length;
-//		for (int i=0; i<n; ++i)
-//			System.out.print(arr[i] + " ");
-//		System.out.println();
-//	}
-//
-//	public static <T> void main (String[] args) {
-//		Integer[] arr6 = new Integer[11];
-//		Integer[] arr6a = new Integer[11];
-//
-//		for (int i = 10; i >= 0; i--) {
-//			arr6[10 - i] = i;
-//			arr6a[i] = i;
-//		}
-//
-//		printArray(arr6);
-//		bogoSort(arr6);
-//		printArray(arr6);
-//		printArray(arr6a);
-//	}
+	//	static <T> void printArray(T[] arr)
+	//	{
+	//		int n = arr.length;
+	//		for (int i=0; i<n; ++i)
+	//			System.out.print(arr[i] + " ");
+	//		System.out.println();
+	//	}
+	//
+	//	public static <T> void main (String[] args) {
+	//		Integer[] arr6 = new Integer[11];
+	//		Integer[] arr6a = new Integer[11];
+	//
+	//		for (int i = 10; i >= 0; i--) {
+	//			arr6[10 - i] = i;
+	//			arr6a[i] = i;
+	//		}
+	//
+	//		printArray(arr6);
+	//		bogoSort(arr6);
+	//		printArray(arr6);
+	//		printArray(arr6a);
+	//	}
 } // class Sorts
