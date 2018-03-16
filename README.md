@@ -13,11 +13,11 @@ Building both a visualizer and audibilizer for the various sorting algorithms
   - ControlPanel.java
   - SortingVisualizer.java
  - edu.grinnell.sortingvisualizer.sortevents
-  - CompareEvent.java
-  - CopyEvent.java
-  - SwapEvent.java
-  - SortEvent.java
+    - CompareEvent.java
+    - CopyEvent.java
+    - SwapEvent.java
+    - SortEvent.java
  - edu.grinnell.sortingvisualizer.sorts
-  - Sorts.java
-  - SortsTest.java
+   - Sorts.java
+    - SortsTest.java
  - README.md
