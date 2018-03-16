@@ -2,7 +2,6 @@ package edu.grinnell.sortingvisualizer.sorts;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import edu.grinnell.sortingvisualizer.sortevents.CompareEvent;
 import edu.grinnell.sortingvisualizer.sortevents.CopyEvent;
@@ -168,7 +167,7 @@ public class Sorts {
 	 */
 	public static <T extends Comparable<T>> int partition(T arr[], int low, int high, List<SortEvent<T>> events) {
 		T pivot = arr[high];
-		
+
 		int i = low - 1; 
 
 		for (int j = low; j < high; j++) {
@@ -218,10 +217,6 @@ public class Sorts {
 		return events;
 	} // quickSort
 
-	// Cycle Sort
-	
-	
-
 	/**
 	 * Apply events to elements of the array in order
 	 * @param arr, events
@@ -231,27 +226,4 @@ public class Sorts {
 			events.get(i).apply(arr);
 		}
 	} // eventSort
-
-		static <T> void printArray(T[] arr)
-		{
-			int n = arr.length;
-			for (int i=0; i<n; ++i)
-				System.out.print(arr[i] + " ");
-			System.out.println();
-		}
-	
-		public static <T> void main (String[] args) {
-			Integer[] arr6 = new Integer[11];
-			Integer[] arr6a = new Integer[11];
-	
-			for (int i = 10; i >= 0; i--) {
-				arr6[10 - i] = i;
-				arr6a[i] = i;
-			}
-	
-			printArray(arr6);
-			cycleSort(arr6);
-			printArray(arr6);
-			printArray(arr6a);
-		}
 } // class Sorts

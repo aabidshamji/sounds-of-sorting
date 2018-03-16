@@ -43,5 +43,6 @@ public class ArrayPanel extends JPanel {
 			}
 			g.fillRect(noteWidth*i, this.getHeight() - noteHeight, noteWidth, noteHeight);
 		}
-	}
+		notes.clearAllHighlighted();
+	} // paintComponent
 }

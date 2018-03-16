@@ -19,8 +19,6 @@ public class SortsTest {
 			return Sorts.mergeSort(arr);
 		case "quick":
 			return Sorts.quickSort(arr);
-		case "bogo":
-			return Sorts.cycleSort(arr);
 		default:
 			throw new IllegalArgumentException("generateEvents");
 		} // switch
@@ -101,10 +99,4 @@ public class SortsTest {
 	public void testQuickSort() {
 		testSort("quick");
 	}
-	
-	@Test
-	public void testBogoSort() {
-		testSort("cycle");
-	}
-
-}
+} // SortsTest

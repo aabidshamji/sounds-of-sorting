@@ -58,8 +58,6 @@ public class ControlPanel extends JPanel {
 			return Sorts.mergeSort(arr);
 		case("Quick"):
 			return Sorts.quickSort(arr);
-		case("Cycle"):
-			return Sorts.cycleSort(arr);
 		default:
 			throw new IllegalArgumentException("generateEvents");
 		}
@@ -109,8 +107,7 @@ public class ControlPanel extends JPanel {
 				"Insertion",
 				"Bubble",
 				"Merge",
-				"Quick",
-				"Cycle"
+				"Quick"
 		});
 		add(sorts);
 
@@ -169,7 +166,6 @@ public class ControlPanel extends JPanel {
 					@Override
 					public void run() {
 						if (index < events.size()) {
-							
 							notes.clearAllHighlighted();
 							SortEvent<Integer> e = events.get(index++);
 							// 1. Apply the next sort event.
