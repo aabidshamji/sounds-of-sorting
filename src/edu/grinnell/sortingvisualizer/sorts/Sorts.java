@@ -159,25 +159,6 @@ public class Sorts {
 	} // mergeSort
 
 	// Quick Sort
-//	/**
-//	 * 
-//	 * @param arr, left, right
-//	 * @return
-//	 */
-//	public static <T extends Comparable<T>> int medianOfThree(T[] arr, int left, int right) {
-//		int med = (left + right) / 2;
-//
-//		if (arr[left].compareTo(arr[right]) > 0 && arr[left].compareTo(arr[med]) < 0
-//				|| arr[left].compareTo(arr[right]) < 0 && arr[left].compareTo(arr[med]) > 0) {
-//			return left;
-//		} else if (arr[right].compareTo(arr[left]) > 0 && arr[right].compareTo(arr[med]) < 0
-//				|| arr[right].compareTo(arr[left]) < 0 && arr[right].compareTo(arr[med]) > 0) {
-//			return right;
-//		} else {
-//			return med;
-//		}
-//	}  // end medianOfThree
-
 
 	/**
 	 * Modifies the array so that all the elements to the left of the pivot are less than the pivot
@@ -187,7 +168,8 @@ public class Sorts {
 	 */
 	public static <T extends Comparable<T>> int partition(T arr[], int low, int high, List<SortEvent<T>> events) {
 		T pivot = arr[high];
-		int i = (low-1); 
+		
+		int i = low - 1; 
 
 		for (int j = low; j < high; j++) {
 			if (arr[j].compareTo(pivot) <= 0) {
@@ -208,10 +190,7 @@ public class Sorts {
 
 	/**
 	 * Recursively sorts an array using Quick Sort Algorithm
-	 * @param arr
-	 * @param low
-	 * @param high
-	 * @param events
+	 * @param arr, low, high, events
 	 */
 	public static <T extends Comparable<T>> void quickSortHelper
 	(T arr[], int low, int high, List<SortEvent<T>> events) {
@@ -227,7 +206,7 @@ public class Sorts {
 	/**
 	 * Sorts an array using Quick Sort Algorithm
 	 * @param arr
-	 * @return
+	 * @return events
 	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> quickSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
@@ -239,73 +218,40 @@ public class Sorts {
 		return events;
 	} // quickSort
 
-	// Bogo Sort
+	// Cycle Sort
+	
+	
+
 	/**
-	 * Check if the array is sorted or not
-	 * @param arr
-	 * @param events
-	 * @return
+	 * Apply events to elements of the array in order
+	 * @param arr, events
 	 */
-	public static <T extends Comparable<T>> boolean bogoSortHelper(T[] arr, List<SortEvent<T>> events)  {  
-		for (int i = 1; i < arr.length; i++) {
-			if (arr[i].compareTo(arr[i-1]) < 0) {
-				events.add(new CompareEvent<T>(i, i-1));
-				return false;  
-			}
-		} // for i
-
-		return true;  
-	} // bogoSortHelper
-
-	/** 
-	 * Sorts an array using Bogo Sort Algorithm
-	 * @param arr
-	 * @return
-	 */
-	public static <T extends Comparable<T>> List<SortEvent<T>> bogoSort(T[] arr)  {  
-		List<SortEvent<T>> events = new ArrayList<>();
-		if (arr == null) {return events;}
-
-		Random rand = new Random();
-		int nextInt = rand.nextInt(arr.length);
-
-		while (!bogoSortHelper(arr, events)) {  
-			for (int i = 0; i < arr.length; i++) {  
-				swap(arr, i, nextInt); 
-				nextInt = rand.nextInt(arr.length);
-			}  
-		}
-
-		return events;
-	} // bogoSort
-
-	// eventSort
 	public static <T> void eventSort(T[] arr, List<SortEvent<T>> events) {
 		for (int i = 0; i < events.size(); i++) {
 			events.get(i).apply(arr);
 		}
 	} // eventSort
 
-	//	static <T> void printArray(T[] arr)
-	//	{
-	//		int n = arr.length;
-	//		for (int i=0; i<n; ++i)
-	//			System.out.print(arr[i] + " ");
-	//		System.out.println();
-	//	}
-	//
-	//	public static <T> void main (String[] args) {
-	//		Integer[] arr6 = new Integer[11];
-	//		Integer[] arr6a = new Integer[11];
-	//
-	//		for (int i = 10; i >= 0; i--) {
-	//			arr6[10 - i] = i;
-	//			arr6a[i] = i;
-	//		}
-	//
-	//		printArray(arr6);
-	//		bogoSort(arr6);
-	//		printArray(arr6);
-	//		printArray(arr6a);
-	//	}
+		static <T> void printArray(T[] arr)
+		{
+			int n = arr.length;
+			for (int i=0; i<n; ++i)
+				System.out.print(arr[i] + " ");
+			System.out.println();
+		}
+	
+		public static <T> void main (String[] args) {
+			Integer[] arr6 = new Integer[11];
+			Integer[] arr6a = new Integer[11];
+	
+			for (int i = 10; i >= 0; i--) {
+				arr6[10 - i] = i;
+				arr6a[i] = i;
+			}
+	
+			printArray(arr6);
+			cycleSort(arr6);
+			printArray(arr6);
+			printArray(arr6a);
+		}
 } // class Sorts

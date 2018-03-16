@@ -9,7 +9,6 @@ import java.util.Collections;
  * in the program.
  */
 public class NoteIndices {
-	//public int n;
 	private Integer[] indices;
 	private boolean[] isHighlightedNotes;
 
@@ -47,25 +46,17 @@ public class NoteIndices {
 	 * @param index the index to highlight
 	 */
 	public void highlightNote(int index) {
-//		if (!(isHighlighted(index))) {
-//			indices[index] = -indices[index];
-//		}
 		isHighlightedNotes[index] = true;
 	}
 
 	/** @return true if the given index is highlighted */
 	public boolean isHighlighted(int index) {
-//		if (indices[index] < 0) {
-//			return true;
-//		}
-//		return false;
 		return isHighlightedNotes[index];
 	}
 
 	/** Clears all highlighted indices from this collection */
 	public void clearAllHighlighted() {
 		for (int i = 0; i < indices.length; i++) {
-//			indices[i] = Math.abs(indices[i]);
 			isHighlightedNotes[i] = false;
 		}
 	}
